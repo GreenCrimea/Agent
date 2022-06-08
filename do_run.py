@@ -1,30 +1,46 @@
+'''
+DO_RUN
+*****
+the function will loop for every step and calculate the
+actions of the agents
+*****
+Version: 0.2
+Date Last Edited: 8/6/22
+*****
+Changelog:
+    0.2 - added comments and cleaned up
+    0.1 - Init commit and basic functionality
+'''
+
+
 import random
 from calculate_action import CalculateAction
 
-def UpdateMap(agents, environment, config, metadata, score):
 
- for i in range(config['population']):
-  metadata, environment, score = CalculateAction(agents, environment, config, metadata, i, score)
+def UpdateMap(agents, environment, config, metadata, score):        # Call the CalculateAgent function for each agent
 
- return metadata, environment, score
+    for i in range(config['population']):
 
+        metadata, environment, score = CalculateAction(agents, environment, config, metadata, i, score)
 
-
-def DoRun(agents, environment, config, metadata, z):
- score = []
- a = 0
- for i in range(len(agents)):
-  score.append(a)
-
- steps = config['steps']
- for i in range(steps):
+    return metadata, environment, score
 
 
-  print(f'GEN{z}, STEP{i}___agent 0>{metadata[0][0]}, {metadata[1][0]} | agent 1>{metadata[0][1]}, {metadata[1][1]} | agent 2>{metadata[0][2]}, {metadata[1][2]}')
+def DoRun(agents, environment, config, metadata, z):                # Call the UpdateMap function for each step
 
+    score = []
+    a = 0
 
+    for i in range(len(agents)):
 
-  metadata, environment, score = UpdateMap(agents, environment, config, metadata, score)
+        score.append(a)
 
+    steps = config['steps']
 
- return metadata, environment, score
+    for i in range(steps):
+
+        print(f'GEN{z}, STEP{i}___agent 0>{metadata[0][0]}, {metadata[1][0]} | agent 1>{metadata[0][1]}, {metadata[1][1]} | agent 2>{metadata[0][2]}, {metadata[1][2]}')
+
+        metadata, environment, score = UpdateMap(agents, environment, config, metadata, score)
+
+    return metadata, environment, score

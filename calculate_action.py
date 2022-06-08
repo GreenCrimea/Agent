@@ -1,13 +1,26 @@
+'''
+CALCULATE_ACTION
+*****
+calculate what grid position an agent will move to in
+any given step
+*****
+Version: 0.2
+Date Last Edited: 8/6/22
+*****
+Changelog:
+    0.2 - added comments and cleaned up
+    0.1 - Init commit and basic functionality
+'''
 
 
-def CalculateInputLayer(environment, config, metadata, num):
+def CalculateInputLayer(environment, config, metadata, num):        # Calculate the values for each input neuron
 
-    neuron0 = 0
-    neuron1 = 0
-    neuron2 = 0
-    neuron3 = 0
+    neuron0 = 0     # activated by objects x+
+    neuron1 = 0     # activated by objects y+
+    neuron2 = 0     # activated by objects x-
+    neuron3 = 0     # activated by objects y-
 
-    for i in range(config['sight_range']):
+    for i in range(config['sight_range']):                          # neuron + for food, neuron - for other agent
         try:
             x = environment[(metadata[0][num] + (i + 1))][metadata[1][num]]
             if x == 50:
@@ -71,16 +84,9 @@ def CalculateInputLayer(environment, config, metadata, num):
     return input_layer
 
 
-
-
-def CalculateOutputLayer(agent, network, num):
-
-
+def CalculateOutputLayer(agent, network, num):                      # check gene type, then calculate output neuron value
+                                                                    # based on input and hidden neurons, and weights
     for i in range(len(agent[num][2])):
-
-
-
-
 
         if agent[num][2][i][0] == 0:
             network[2][agent[num][2][i][2]] = network[2][agent[num][2][i][2]] + ((network[0][agent[num][2][i][1]] + 0.1)* (agent[num][2][i][6] + agent[num][3][0]['risk_taking'])) / 10
@@ -117,16 +123,16 @@ def CalculateOutputLayer(agent, network, num):
 
 def CalculateMovement(agent, network, metadata, environment, num, score):
 
-    network2 = network[2]
-    direction = 0
+    network2 = network[2]                                           # calculate which direction to move based on how
+    direction = 0                                                   # activated the output neurons are
     network_sorted = max(network2)
-
 
     for i in range(len(network[2])):
         if network[2][i] == network_sorted:
-            direction = i
-
-    if direction == 0:
+            direction = i                                           # neuron0 = x+
+                                                                    # neuron1 = y+
+    if direction == 0:                                              # neuron2 = x-
+                                                                    # neuron3 = y-
         try:
             if environment[(metadata[0][num] + 1)][metadata[1][num]] == 0:
                 environment[(metadata[0][num] + 1)][metadata[1][num]] = 250
@@ -137,10 +143,13 @@ def CalculateMovement(agent, network, metadata, environment, num, score):
                 environment[metadata[0][num]][metadata[1][num]] = 0
                 metadata[0][num] = metadata[0][num] + 1
                 score[num] = score[num] + 1
+
         except IndexError:
+
             return metadata, environment, score
 
     if direction == 1:
+
         try:
             if environment[metadata[0][num]][(metadata[1][num]+1)] == 0:
                 environment[metadata[0][num]][(metadata[1][num]+1)] = 250
@@ -151,10 +160,13 @@ def CalculateMovement(agent, network, metadata, environment, num, score):
                 environment[metadata[0][num]][metadata[1][num]] = 0
                 metadata[1][num] = metadata[1][num] + 1
                 score[num] = score[num] + 1
+
         except IndexError:
+
             return metadata, environment, score
 
     if direction == 2:
+
         try:
             if environment[(metadata[0][num] - 1)][metadata[1][num]] == 0:
                 environment[(metadata[0][num] - 1)][metadata[1][num]] = 250
@@ -165,10 +177,13 @@ def CalculateMovement(agent, network, metadata, environment, num, score):
                 environment[metadata[0][num]][metadata[1][num]] = 0
                 metadata[0][num] = metadata[0][num] - 1
                 score[num] = score[num] + 1
+
         except IndexError:
+
             return metadata, environment, score
 
     if direction == 3:
+
         try:
             if environment[metadata[0][num]][(metadata[1][num]-1)] == 0:
                 environment[metadata[0][num]][(metadata[1][num]-1)] = 250
@@ -179,7 +194,9 @@ def CalculateMovement(agent, network, metadata, environment, num, score):
                 environment[metadata[0][num]][metadata[1][num]] = 0
                 metadata[1][num] = metadata[1][num] - 1
                 score[num] = score[num] + 1
+
         except IndexError:
+
             return metadata, environment, score
 
     return metadata, environment, score
@@ -191,11 +208,13 @@ def CalculateAction(agents, environment, config, metadata, num, score):
 
     hidden_layer = []
     hidden_neuron = 0
-    hidden_layer.append(hidden_neuron)
-
+    hidden_layer.append(hidden_neuron)                              # this function calls the other functions to
+                                                                    # calculate the agents actions
     output_layer = []
     output_neuron = 0
+
     for i in range(config['output_neurons']):
+
         output_layer.append(output_neuron)
 
     network = []
